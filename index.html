@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search user Vue</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <div id="app" class="container">
+        <div class="favorites">
+            <transition-group name="list">
+                <div 
+                    :class="{'favorite--selected': checkFavorite(favorite.id)}" 
+                    class="favorite" v-for="favorite in allFavorites" :key="favorite.id" >
+                    <a @click.prevent="showFavorite(favorite)" href="#">
+                        <img class="image-profile" :src="favorite.avatar_url" alt="">
+                    </a>
+                </div>
+            </transition-group>
+        </div>
+        <article class="content">
+            <div class="form__search">
+                <h1 class="content__title">Search Github users  </h1>
+                <form class="search-" v-on:submit.prevent="doSearch" >
+                    <input v-model="search" type="text" class="search__input" required name="" placeholder="Search github users">
+                    <button type="submit" class="search__button" >Search</button>
+                </form>
+            </div>
+
+            <Transition>
+                <div class="result" v-if="result" >
+                    <a v-if="isFavorite" href="#" @click="removeFavorite" >Remove favorite ⭐</a>
+                    <a v-else href="#" @click="addFavorite" >Add favorite ⭐</a>
+                    <h2 class="result__name">{{ result.name }}</h2>
+                    <div class="contain_image_bio">
+                        <img v-bind:src="result.avatar_url" :alt="result.name">
+                        <p class="result__bio">
+                            {{ result.bio }} <br>
+                            <a v-bind:href="result.blog">{{result.blog}}</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="result__error" v-if="error" >Error: User not found</div>
+                <p class="message__wait" v-else>Waiting for search...</p>
+            </Transition>
+        </article> 
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>
